@@ -4,7 +4,6 @@ import com.vking.common.Const;
 import com.vking.common.ServerResponse;
 import com.vking.pojo.User;
 import com.vking.service.IUserService;
-import com.vking.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Created by XC on 2017/12/17.
+ * Controller
  */
 @Controller
 @RequestMapping("/user/")
@@ -24,10 +24,12 @@ public class UserController {
     private IUserService iUserService;
 
     /**
-     * 用户登录
-     * @param username
-     * @param password
-     * @return
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @param session session
+     * @return ServerResponse 接口数据
+     *
      */
     @ResponseBody
     @RequestMapping(value = "login.do",method = RequestMethod.POST)
@@ -76,7 +78,23 @@ public class UserController {
     @RequestMapping(value = "forget_check_answer.do",method = RequestMethod.GET)
     public ServerResponse<String> forgetCheckAnswer(String username,String question,String answer){
         return iUserService.checkAnswer(username,question,answer);
-
     }
+
+    @ResponseBody
+    @RequestMapping(value = "forget_reset_password.do",method = RequestMethod.GET)
+    public ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken){
+        return iUserService.forgetResetPassword(username,passwordNew,forgetToken);
+    }
+
+    public ServerResponse<String> resetPassword(HttpSession session,String passwordOld,String passwordNew){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null){
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        return null;
+    }
+
+
+
 
 }
