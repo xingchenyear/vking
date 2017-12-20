@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
@@ -114,7 +115,7 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createByErrorMessage("答案错误!");
     }
 
-    //
+    //修改密码校验token
     public ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken){
        if(StringUtils.isBlank(forgetToken)){
            return ServerResponse.createByErrorMessage("参数错误，token需要传递");
@@ -139,13 +140,40 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createByErrorMessage("密码修改失败");
     }
 
-    public ServerResponse<String> resetPassword(HttpSession session, String passwordOld, String passwordNew){
-        //防止横向越权，校验旧密码
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
-        int resultCount = userMapper.updatePasswordByUsername(user.getUsername(),passwordOld);
-        if(resultCount > 0){
-
+    //登录状态下重置密码
+    public ServerResponse<String> resetPassword(User user, String passwordOld, String passwordNew){
+        //防止横向越权，校验旧密码和ID
+        String md5PasswordOld = MD5Util.MD5EncodeUtf8(passwordOld);
+        int resultCount = userMapper.checkPassword(md5PasswordOld,user.getId());
+        if(resultCount == 0){
+            return ServerResponse.createByErrorMessage("旧密码输入错误");
         }
-        return null;
+        user.setPassword(MD5Util.MD5EncodeUtf8(passwordNew));
+        int updateCount = userMapper.updateByPrimaryKeySelective(user);
+        if(updateCount > 0){
+            return ServerResponse.createBySuccessMessage("密码更新成功");
+        }
+        return ServerResponse.createByErrorMessage("密码更新失败");
+    }
+
+    //更改用户信息
+    public ServerResponse<User> update_information(User user){
+        //username不能被更新
+        //校验email看是否存在，存在该用户不能使用
+        int resultCount = userMapper.checkEmailByUserId(user.getEmail(),user.getId());
+        if(resultCount > 0){
+            return ServerResponse.createByErrorMessage("Email已经存在请更换Email");
+        }
+        User updateuser = new User();
+        updateuser.setId(user.getId());
+        updateuser.setEmail(user.getEmail());
+        updateuser.setPhone(user.getPhone());
+        updateuser.setQuestion(user.getQuestion());
+        updateuser.setAnswer(user.getAnswer());
+        int updateCount = userMapper.updateByPrimaryKeySelective(updateuser);
+        if(updateCount > 0){
+            return ServerResponse.createBySuccess("用户信息修改成功",updateuser);
+        }
+        return ServerResponse.createByErrorMessage("用户信息修改改失败");
     }
 }
