@@ -180,4 +180,22 @@
     count(1) FROM  mmall_user
     WHERE username=#{username},question=#{question},answer=#{answer}
   </select>
+
+  <update id="updatePasswordByUsername" parameterType="map" >
+    UPDATE mmall_user
+    set password = #{passwordNew} ,update_time = now()
+    where username=#{username}
+  </update>
+  
+  <select id="checkPassword" resultType="int" parameterType="map">
+    SELECT count(1)
+    FROM mmall_user
+    WHERE id=#{userId} and password = #{password}
+  </select>
+
+  <select id="checkEmailByUserId" parameterType="map" resultType="int">
+    select count(1) from mmall_user
+    where email = #{email} and id != #{userId}
+
+  </select>
 </mapper>
