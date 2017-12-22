@@ -41,8 +41,8 @@ public class UserController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "loginout.do", method = RequestMethod.POST)
-    public ServerResponse<String> loginout(HttpSession session) {
+    @RequestMapping(value = "logout.do", method = RequestMethod.POST)
+    public ServerResponse<String> logout(HttpSession session) {
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccess();
     }
