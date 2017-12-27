@@ -24,7 +24,7 @@
     from mmall_user
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from mmall_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
@@ -178,7 +178,7 @@
   <select id="selectAnswer" parameterType="map" resultType="int">
     SELECT
     count(1) FROM  mmall_user
-    WHERE username=#{username},question=#{question},answer=#{answer}
+    WHERE username=#{username} and question=#{question} and answer=#{answer}
   </select>
 
   <update id="updatePasswordByUsername" parameterType="map" >
@@ -196,6 +196,5 @@
   <select id="checkEmailByUserId" parameterType="map" resultType="int">
     select count(1) from mmall_user
     where email = #{email} and id != #{userId}
-
   </select>
 </mapper>

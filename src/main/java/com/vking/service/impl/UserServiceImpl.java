@@ -11,8 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.jws.soap.SOAPBinding;
-import javax.servlet.http.HttpSession;
+
 import java.util.UUID;
 
 /**
@@ -40,6 +39,8 @@ public class UserServiceImpl implements IUserService {
         }
 
         user.setPassword(StringUtils.EMPTY);
+        //user.setAnswer(StringUtils.EMPTY);
+        //user.setQuestion(StringUtils.EMPTY);
         return ServerResponse.createBySuccess("登录成功", user);
 
     }
@@ -47,7 +48,6 @@ public class UserServiceImpl implements IUserService {
     @Override
     public ServerResponse<String> register(User user) {
         //校验用户名是否存在
-
         ServerResponse<String> validResponse = this.checkValid(user.getEmail(), Const.EMAIL);
         if (!validResponse.isSuccess()) {
             return validResponse;
@@ -70,7 +70,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ServerResponse<String> checkValid(String str, String type) {
-        if (StringUtils.isBlank(type)) {
+        if (!StringUtils.isBlank(type)) {
             if (Const.USERNAME.equals(type)) {
                 int resultCount = userMapper.checkUsername(str);
                 if (resultCount > 0) {
@@ -84,7 +84,7 @@ public class UserServiceImpl implements IUserService {
                 }
             }
         } else {
-            ServerResponse.createByErrorMessage("参数错误");
+           return ServerResponse.createByErrorMessage("参数错误");
         }
         return ServerResponse.createBySuccessMessage("校验成功");
     }
@@ -97,7 +97,7 @@ public class UserServiceImpl implements IUserService {
         }
 
         String question = userMapper.selectQuestion(username);
-        if (!StringUtils.isBlank(question)){
+        if (StringUtils.isBlank(question)){
             return ServerResponse.createByErrorMessage("用户未设置密码找回问题");
         }
         return ServerResponse.createBySuccess(question);
@@ -176,4 +176,29 @@ public class UserServiceImpl implements IUserService {
         }
         return ServerResponse.createByErrorMessage("用户信息修改改失败");
     }
+
+    public ServerResponse<User> getInformation(Integer userId){
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user ==null){
+            ServerResponse.createByErrorMessage("找不到当前用户");
+        }
+        user.setPassword(StringUtils.EMPTY);
+        return ServerResponse.createBySuccess(user);
+    }
+
+    //backend
+
+    /**
+     *
+     * 校验是否是管理员
+     * @param user 用户
+     * @return 是否是管理员
+     */
+    public ServerResponse checkAdmin(User user){
+        if (user!=null && user.getRole() == Const.Role.ROLE_ADMIN){
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByError();
+    }
+
 }

@@ -1,9 +1,8 @@
 package com.vking.common;
 
-import com.vking.pojo.User;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.schema.JsonSerializableSchema;
 
 import java.io.Serializable;
 
@@ -87,5 +86,6 @@ public class ServerResponse<T> implements Serializable {
         return new ServerResponse<T>(errorCode,errorMessage);
 
     }
+
 
 }

@@ -1,7 +1,8 @@
 package com.vking.common;
 
 /**
- * Created by Administrator on 2017/12/17.
+ * Created by XC on 2017/12/17.
+ *  枚举类
  */
 public enum  ResponseCode {
     SUCCESS(0,"SUCCESS"),
