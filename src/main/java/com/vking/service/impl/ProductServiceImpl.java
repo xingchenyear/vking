@@ -5,7 +5,10 @@ import com.vking.common.ServerResponse;
 import com.vking.dao.ProductMapper;
 import com.vking.pojo.Product;
 import com.vking.service.IProductService;
+import com.vking.vo.ProductDetailVO;
 import org.apache.commons.lang3.StringUtils;
+import org.omg.CORBA.Object;
+import org.omg.CORBA.portable.ValueOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,5 +61,39 @@ public class ProductServiceImpl implements IProductService {
         }
         return ServerResponse.createByErrorMessage("修改商品状态失败");
     }
+
+    public ServerResponse<Object> manageProductDetail(Integer productId){
+        if(productId == null){
+            return ServerResponse.cteateByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        Product product = productMapper.selectByPrimaryKey(productId);
+        if(product == null){
+            return ServerResponse.createByErrorMessage("产品已下架或者删除");
+        }
+        ProductDetailVO productDetailVO =
+
+    }
+
+    private void assembleProductDetailVO(Product product){
+        ProductDetailVO productDetailVO = new ProductDetailVO();
+        productDetailVO.setId(product.getId());
+        productDetailVO.setSubtitle(product.getSubtitle());
+        productDetailVO.setPrice(product.getPrice());
+        productDetailVO.setMainImage(product.getMainImage());
+        productDetailVO.setSubimage(product.getSubImages());
+        productDetailVO.setCategoryId(product.getCategoryId());
+        productDetailVO.setDetail(product.getDetail());
+        productDetailVO.setName(product.getName());
+        productDetailVO.setStatus(product.getStatus());
+        productDetailVO.setStock(product.getStock());
+
+        //imageHost
+
+
+
+    }
+
+
+
 
 }
