@@ -1,8 +1,11 @@
 package com.vking.service.impl;
 
+import com.google.common.collect.Lists;
 import com.vking.service.IFileService;
+import com.vking.util.FTPUntil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -13,6 +16,7 @@ import java.util.UUID;
  * 文件处理
  * Created by XC on 2018/1/1.
  */
+@Service("iFileService")
 public class FileServiceImpl implements IFileService{
 
     private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
@@ -35,17 +39,18 @@ public class FileServiceImpl implements IFileService{
             file.transferTo(targetFile);
             //文件上传成功
 
-            // TODO: 2018/1/1 将targetFile上传到ftp服务器
+            //已经将targetFile上传到ftp服务器
+            FTPUntil.uploadFile(Lists.newArrayList(targetFile));
 
-            // TODO: 2018/1/1 上传完成后，删除upload的文件
-
+            //上传完成后，删除upload的文件
+            targetFile.delete();
         } catch (IOException e) {
             logger.error("上传文件异常",e);
             return null;
         }
 
 
-        return null;
+        return targetFile.getName();
     }
 
 
