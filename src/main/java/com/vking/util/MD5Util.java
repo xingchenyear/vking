@@ -1,9 +1,14 @@
 package com.vking.util;
 
+
+import ch.qos.logback.classic.gaffer.PropertyUtil;
+import com.vking.common.PropertiesUtil;
+
 import java.security.MessageDigest;
+import java.util.Properties;
 
 /**
- * Created by geely
+ * Created by XC 2018/01/07
  */
 public class MD5Util {
 
