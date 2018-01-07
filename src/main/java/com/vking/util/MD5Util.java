@@ -8,7 +8,7 @@ import java.security.MessageDigest;
 import java.util.Properties;
 
 /**
- * Created by geely
+ * Created by XC 2018/01/07
  */
 public class MD5Util {
 
