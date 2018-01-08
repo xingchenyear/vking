@@ -4,7 +4,7 @@ import com.vking.pojo.Product;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+// 20180108
 public interface ProductMapper {
     int deleteByPrimaryKey(Integer id);
 
