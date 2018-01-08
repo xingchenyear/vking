@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -35,6 +34,7 @@ public class ProductServiceImpl implements IProductService {
 
     @Autowired
     CategoryMapper categoryMapper;
+
     public ServerResponse saveOrUpdateProduct(Product product){
         if(product != null){
             if(StringUtils.isNotBlank(product.getMainImage())){
@@ -157,7 +157,7 @@ public class ProductServiceImpl implements IProductService {
     public ServerResponse upload(MultipartFile file, HttpServletRequest request){
         String path = request.getSession().getServletContext().getRealPath("upload");
 
-
+        return null;
     }
 
 }
