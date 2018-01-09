@@ -55,7 +55,7 @@ public class ProductManageController {
         }
         if (iUserService.checkAdmin(user).isSuccess()){
             //逻辑
-            return iProductService.setSaleStstus(productId,status);
+            return iProductService.setSaleStatus(productId,status);
         }else {
             return ServerResponse.createByErrorMessage("无权限操作");
         }
