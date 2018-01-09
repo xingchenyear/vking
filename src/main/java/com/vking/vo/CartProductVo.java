@@ -3,10 +3,12 @@ package com.vking.vo;
 import java.math.BigDecimal;
 
 /**
- * 购物车商品vo
- * Created by Administrator on 2018/1/9.
+ * 购物车单品商品vo
+ * Created by xc on 2018/1/9.
  */
 public class CartProductVo {
+
+    //结合产品和购物车的对象
 
     private Integer id;
     private Integer userId;
