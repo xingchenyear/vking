@@ -127,7 +127,14 @@
     and product_id = #{productId}
 
   </select>
+  <select id="selectCartByUserId" resultMap="BaseResultMap" parameterType="int">
+    SELECT
+    <include refid="Base_Column_List"/>
+    WHERE
+    mmall_cart
+    FROM user_id = #{userId}
 
+  </select>
 
 
 
