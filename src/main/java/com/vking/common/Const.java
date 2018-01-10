@@ -16,5 +16,13 @@ public class Const {
         int ROLE_ADMIN = 1;  //管理员
     }
 
+    public interface Cart{
+        int CHECKED = 1; //选中状态
+        int UN_CHECKER = 0;// 未选中状态
+
+        String LIMIT_NUM_FAIL = "LIMIT_NUMFAIL";
+        String LIMIT_NUM_SUCCESS = "LIMIT_NUM_SUCCESS";
+    }
+
 
 }

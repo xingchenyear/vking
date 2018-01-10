@@ -22,6 +22,6 @@ public interface CartMapper {
 
     List<Cart> selectCartByUserId(Integer userId);
 
-
+    int selectAllCheckedStatus(Integer userId);
 
 }

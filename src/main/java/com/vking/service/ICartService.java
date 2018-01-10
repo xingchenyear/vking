@@ -1,7 +1,9 @@
 package com.vking.service;
 
-/**
- * Created by Administrator on 2018/1/9.
- */
+import com.vking.common.ServerResponse;
+import com.vking.vo.CartVo;
+
 public interface ICartService {
-}
+    ServerResponse<CartVo> add(Integer userId, Integer productId, Integer count);
+
+    }
