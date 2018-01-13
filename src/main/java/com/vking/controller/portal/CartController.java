@@ -20,15 +20,35 @@ public class CartController {
     @Autowired
     private ICartService iCartService;
 
-    @RequestMapping("list.do")
+    @RequestMapping("add.do")
     @ResponseBody
-    public ServerResponse<CartVo> getCartList(HttpSession session, Integer productId, Integer userId, int count){
+    public ServerResponse<CartVo> add(HttpSession session, Integer productId, Integer count){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null){
             return ServerResponse.cteateByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
         }
 
-        return iCartService.add(userId,productId,count);
+        return iCartService.add(user.getId(),productId,count);
+    }
+
+    @RequestMapping("update.do")
+    @ResponseBody
+    public ServerResponse<CartVo> update(HttpSession session, Integer productId, Integer count){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null){
+            return ServerResponse.cteateByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iCartService.update(user.getId(),productId,count);
+    }
+
+    @RequestMapping("delete_product.do")
+    @ResponseBody
+    public ServerResponse<CartVo> deleteProduct(HttpSession session, String product){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null){
+            return ServerResponse.cteateByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iCartService.delete(user.getId(),product);
     }
 
 }

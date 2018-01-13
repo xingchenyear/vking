@@ -4,6 +4,7 @@ import com.vking.pojo.Cart;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CartMapper {
     int deleteByPrimaryKey(Integer id);
@@ -23,5 +24,7 @@ public interface CartMapper {
     List<Cart> selectCartByUserId(Integer userId);
 
     int selectAllCheckedStatus(Integer userId);
+
+    int deleteByUserIdProductId(@Param("userId") Integer userId,@Param("productList")List<String> productList);
 
 }
