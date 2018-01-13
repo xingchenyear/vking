@@ -1,6 +1,7 @@
 package com.vking.service.impl;
 
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.vking.common.Const;
 import com.vking.common.ResponseCode;
@@ -30,6 +31,7 @@ public class CartServiceImpl implements ICartService{
 
     @Autowired
     ProductMapper productMapper;
+
     public ServerResponse<CartVo> add(Integer userId,Integer productId,Integer count){
         if (productId==null || count==null){
             return ServerResponse.cteateByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
@@ -51,6 +53,36 @@ public class CartServiceImpl implements ICartService{
         CartVo cartVo=getCartVoLimit(userId);
         return ServerResponse.createBySuccess(cartVo);
     }
+
+    public ServerResponse<CartVo> update(Integer userId,Integer productId,Integer count) {
+        if (productId == null || count == null) {
+            return ServerResponse.cteateByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        Cart cart = cartMapper.selectCartByProductIdUserId(productId,userId);
+        if (cart != null){
+            cart.setQuantity(count);
+            cartMapper.updateByPrimaryKeySelective(cart);
+        }
+        CartVo cartVo = this.getCartVoLimit(userId);
+        return ServerResponse.createBySuccess(cartVo);
+    }
+
+    public ServerResponse<CartVo> delete(Integer userId,String productId){
+        if (productId == null) {
+            return ServerResponse.cteateByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        List<String> productList = Splitter.on(",").splitToList(productId);
+        int result = cartMapper.deleteByUserIdProductId(userId,productList);
+        if (result>0){
+            CartVo cartVo=this.getCartVoLimit(userId);
+            return ServerResponse.createBySuccess(cartVo);
+        }
+        return ServerResponse.createByErrorMessage("删除失败");
+
+    }
+
+
+
 
 
     private CartVo getCartVoLimit(Integer userId){
@@ -75,7 +107,7 @@ public class CartServiceImpl implements ICartService{
                     cartProductVo.setProductStatus(product.getStatus());
                     cartProductVo.setProductStock(product.getStock());
 
-                    int buyLimitCount = 0;
+                    int buyLimitCount;
                     if (product.getStock() >= cartItem.getQuantity()) {
                         buyLimitCount = cartItem.getQuantity();
                         cartProductVo.setLimitQuantity(Const.Cart.LIMIT_NUM_SUCCESS);
